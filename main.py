@@ -14,19 +14,24 @@ button_destination = sg.FolderBrowse("Choose", key="destination")
 button_extract = sg.Button("Extract")
 output_label = sg.Text(key="output", text_color="green")
 
+button_exit = sg.Button("Exit")
+
 window = sg.Window("Archive Extractor", layout=[
                                                 [label_archive, input_archive, button_archive],
                                                 [label_destination, input_destination, button_destination],
-                                                [button_extract, output_label]],
+                                                [button_extract, output_label],
+                                                [button_exit]],
                                                 font=["Helvetica", 16])
 
 while True:
     event, values = window.read()
-    print(event, values)
-    archivepath = values["archive"]
-    dest_dir = values["destination"]
-    extract_archive(archivepath, dest_dir)
-    window["output"].update(value="Extraction completed")
+    if event == sg.WIN_CLOSED or event == "Exit":
+        break
+    if event == "Extract":
+        archivepath = values["archive"]
+        dest_dir = values["destination"]
+        extract_archive(archivepath, dest_dir)
+        window["output"].update(value="Extraction completed")
 
 window.read()
 window.close()
